@@ -13,17 +13,21 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-books-table',
   imports: [
+    CommonModule,
     MatTableModule,
     MatButtonModule,
     MatIconModule,
     FormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSortModule
+    MatSortModule,
+    MatTooltipModule
   ],
   templateUrl: './books-table.component.html',
   styleUrl: './books-table.component.scss'
