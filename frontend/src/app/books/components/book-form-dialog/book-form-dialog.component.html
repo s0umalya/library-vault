@@ -1,4 +1,6 @@
-<h2 mat-dialog-title>Add Book</h2>
+<h2 mat-dialog-title>
+  {{ isEditMode ? 'Edit Book' : 'Add Book' }}
+</h2>
 
 <form [formGroup]="form">
 
@@ -74,7 +76,7 @@
       type="button"
       [disabled]="form.invalid"
       (click)="save()">
-      Save
+    {{ isEditMode ? 'Update' : 'Save' }}
     </button>
   </mat-dialog-actions>
 

@@ -87,3 +87,39 @@ pub fn add_book(book: Book) -> Result<(), String> {
 
     Ok(())
 }
+
+#[tauri::command]
+pub fn update_book(book: Book) -> Result<(), String> {
+    let conn = Connection::open("../library.db")
+        .map_err(|e| e.to_string())?;
+
+    let rows = conn.execute(
+        "
+        UPDATE books
+        SET
+            title = ?1,
+            author = ?2,
+            genre = ?3,
+            publisher = ?4,
+            isbn = ?5,
+            publication_year = ?6,
+            status = ?7
+        WHERE id = ?8
+        ",
+        params![
+            book.title,
+            book.author,
+            book.genre,
+            book.publisher,
+            book.isbn,
+            book.publication_year,
+            book.status.unwrap_or("Available".to_string()),
+            book.id
+        ],
+    )
+    .map_err(|e| e.to_string())?;
+
+    println!("Rows updated: {}", rows);
+
+    Ok(())
+}

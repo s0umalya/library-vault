@@ -14,6 +14,7 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-book-form-dialog',
@@ -24,7 +25,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatDialogModule,
     MatButtonModule,
     MatInputModule,
-    MatFormFieldModule
+    MatFormFieldModule,
   ],
   templateUrl: './book-form-dialog.component.html',
   styleUrl: './book-form-dialog.component.scss'
@@ -36,6 +37,7 @@ export class BookFormDialogComponent {
   private dialogRef = inject(
     MatDialogRef<BookFormDialogComponent>
   );
+  data = inject(MAT_DIALOG_DATA, { optional: true });
 
   form = this.fb.group({
     title: ['', Validators.required],
@@ -46,15 +48,32 @@ export class BookFormDialogComponent {
     publicationYear: [null]
   });
 
+  isEditMode: boolean = false;
+
+  ngOnInit(): void {
+    this.isEditMode = !!this.data;
+
+    if (this.isEditMode) {
+      this.form.patchValue(this.data);
+    }
+  }
+
   save(): void {
 
     const book = this.form.getRawValue();
 
     this.dialogRef.close({
-      ...book,
+      id: this.data?.id,
+      title: book.title,
+      author: book.author,
+      genre: book.genre,
+      publisher: book.publisher,
+      isbn: book.isbn,
       publicationYear: book.publicationYear
         ? Number(book.publicationYear)
-        : null
+        : null,
+      status: this.data?.status ?? 'Available',
+      createdAt: this.data?.createdAt
     });
 
   }

@@ -15,4 +15,8 @@ export class BookService {
     return invoke('add_book', { book });
   }
 
+  updateBook(book: Book): Promise<void> {
+    return invoke('update_book', { book });
+  }
+
 }
