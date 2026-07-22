@@ -10,6 +10,9 @@ import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatSort, MatSortModule } from '@angular/material/sort';
+import { ViewChild } from '@angular/core';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-books-table',
@@ -19,14 +22,16 @@ import { MatInputModule } from '@angular/material/input';
     MatIconModule,
     FormsModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    MatSortModule
   ],
   templateUrl: './books-table.component.html',
   styleUrl: './books-table.component.scss'
 })
 export class BooksTableComponent {
+  @ViewChild(MatSort) sort!: MatSort;
   private dialog = inject(MatDialog);
-  books: Book[] = [];
+  dataSource = new MatTableDataSource<Book>();
   displayedColumns = [
     'title',
     'author',
@@ -47,7 +52,8 @@ export class BooksTableComponent {
   loadBooks() {
     this.bookService.getBooks().then(data => {
       this.allBooks = data;
-      this.books = [...data];
+      this.dataSource.data = data;
+      this.dataSource.sort = this.sort;
     });
   }
 
@@ -116,22 +122,20 @@ export class BooksTableComponent {
 
   filterBooks(): void {
 
-    const value = this.searchText
-      .trim()
-      .toLowerCase();
+  const value = this.searchText.trim().toLowerCase();
 
-    if (!value) {
-      this.books = [...this.allBooks];
-      return;
-    }
-
-    this.books = this.allBooks.filter(book =>
-      book.title.toLowerCase().includes(value) ||
-      book.author.toLowerCase().includes(value) ||
-      (book.genre ?? '').toLowerCase().includes(value) ||
-      (book.publisher ?? '').toLowerCase().includes(value) ||
-      (book.isbn ?? '').toLowerCase().includes(value)
-    );
-
+  if (!value) {
+    this.dataSource.data = [...this.allBooks];
+    return;
   }
+
+  this.dataSource.data = this.allBooks.filter(book =>
+    book.title.toLowerCase().includes(value) ||
+    book.author.toLowerCase().includes(value) ||
+    (book.genre ?? '').toLowerCase().includes(value) ||
+    (book.publisher ?? '').toLowerCase().includes(value) ||
+    (book.isbn ?? '').toLowerCase().includes(value)
+  );
+
+}
 }
