@@ -19,4 +19,8 @@ export class BookService {
     return invoke('update_book', { book });
   }
 
+  deleteBook(id: number): Promise<void> {
+    return invoke('delete_book', { id });
+  }
+
 }

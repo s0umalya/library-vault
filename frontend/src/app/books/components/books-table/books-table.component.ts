@@ -6,6 +6,7 @@ import { BookFormDialogComponent } from '../book-form-dialog/book-form-dialog.co
 import { Book } from '../../models/book.model';
 import { BookService } from '../../services/book.service';
 import { MatIconModule } from '@angular/material/icon';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-books-table',
@@ -76,6 +77,30 @@ export class BooksTableComponent {
       this.bookService.addBook(result).then(() => {
         this.loadBooks();
       });
+    });
+
+  }
+
+  deleteBook(book: Book): void {
+
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '400px',
+      data: {
+        title: 'Delete Book',
+        message: `Are you sure you want to delete "${book.title}"?`
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+
+      if (!result) {
+        return;
+      }
+
+      this.bookService.deleteBook(book.id!).then(() => {
+        this.loadBooks();
+      });
+
     });
 
   }

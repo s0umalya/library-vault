@@ -123,3 +123,22 @@ pub fn update_book(book: Book) -> Result<(), String> {
 
     Ok(())
 }
+
+#[tauri::command]
+pub fn delete_book(id: i32) -> Result<(), String> {
+    let conn = Connection::open("../library.db")
+        .map_err(|e| e.to_string())?;
+
+    let rows = conn.execute(
+        "
+        DELETE FROM books
+        WHERE id = ?1
+        ",
+        params![id],
+    )
+    .map_err(|e| e.to_string())?;
+
+    println!("Rows deleted: {}", rows);
+
+    Ok(())
+}
