@@ -11,7 +11,8 @@ import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSort, MatSortModule } from '@angular/material/sort';
-import { ViewChild } from '@angular/core';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { ViewChild, AfterViewInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CommonModule } from '@angular/common';
@@ -27,13 +28,16 @@ import { CommonModule } from '@angular/common';
     MatFormFieldModule,
     MatInputModule,
     MatSortModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatPaginatorModule
   ],
   templateUrl: './books-table.component.html',
   styleUrl: './books-table.component.scss'
 })
-export class BooksTableComponent {
+export class BooksTableComponent implements AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatPaginator)
+  paginator!: MatPaginator;
   private dialog = inject(MatDialog);
   dataSource = new MatTableDataSource<Book>();
   displayedColumns = [
@@ -51,18 +55,30 @@ export class BooksTableComponent {
 
   constructor(private bookService: BookService) { }
 
+  ngOnInit() {
+    this.loadBooks();
+  }
+
+  ngAfterViewInit(): void {
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+  }
+
 
 
   loadBooks() {
     this.bookService.getBooks().then(data => {
       this.allBooks = data;
       this.dataSource.data = data;
-      this.dataSource.sort = this.sort;
-    });
-  }
 
-  ngOnInit() {
-    this.loadBooks();
+      if (this.sort) {
+        this.dataSource.sort = this.sort;
+      }
+
+      if (this.paginator) {
+        this.dataSource.paginator = this.paginator;
+      }
+    });
   }
 
   editBook(book: Book): void {
@@ -126,20 +142,20 @@ export class BooksTableComponent {
 
   filterBooks(): void {
 
-  const value = this.searchText.trim().toLowerCase();
+    const value = this.searchText.trim().toLowerCase();
 
-  if (!value) {
-    this.dataSource.data = [...this.allBooks];
-    return;
+    if (!value) {
+      this.dataSource.data = [...this.allBooks];
+    } else {
+      this.dataSource.data = this.allBooks.filter(book =>
+        book.title.toLowerCase().includes(value) ||
+        book.author.toLowerCase().includes(value) ||
+        (book.genre ?? '').toLowerCase().includes(value) ||
+        (book.publisher ?? '').toLowerCase().includes(value) ||
+        (book.isbn ?? '').toLowerCase().includes(value)
+      );
+    }
+
+    this.paginator.firstPage();
   }
-
-  this.dataSource.data = this.allBooks.filter(book =>
-    book.title.toLowerCase().includes(value) ||
-    book.author.toLowerCase().includes(value) ||
-    (book.genre ?? '').toLowerCase().includes(value) ||
-    (book.publisher ?? '').toLowerCase().includes(value) ||
-    (book.isbn ?? '').toLowerCase().includes(value)
-  );
-
-}
 }
