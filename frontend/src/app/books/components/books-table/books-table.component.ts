@@ -7,13 +7,19 @@ import { Book } from '../../models/book.model';
 import { BookService } from '../../services/book.service';
 import { MatIconModule } from '@angular/material/icon';
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
+import { FormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-books-table',
   imports: [
     MatTableModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule
   ],
   templateUrl: './books-table.component.html',
   styleUrl: './books-table.component.scss'
@@ -31,6 +37,8 @@ export class BooksTableComponent {
     'status',
     'actions'
   ];
+  searchText = '';
+  allBooks: Book[] = [];
 
   constructor(private bookService: BookService) { }
 
@@ -38,7 +46,8 @@ export class BooksTableComponent {
 
   loadBooks() {
     this.bookService.getBooks().then(data => {
-      this.books = data;
+      this.allBooks = data;
+      this.books = [...data];
     });
   }
 
@@ -102,6 +111,27 @@ export class BooksTableComponent {
       });
 
     });
+
+  }
+
+  filterBooks(): void {
+
+    const value = this.searchText
+      .trim()
+      .toLowerCase();
+
+    if (!value) {
+      this.books = [...this.allBooks];
+      return;
+    }
+
+    this.books = this.allBooks.filter(book =>
+      book.title.toLowerCase().includes(value) ||
+      book.author.toLowerCase().includes(value) ||
+      (book.genre ?? '').toLowerCase().includes(value) ||
+      (book.publisher ?? '').toLowerCase().includes(value) ||
+      (book.isbn ?? '').toLowerCase().includes(value)
+    );
 
   }
 }

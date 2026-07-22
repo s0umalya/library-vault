@@ -6,6 +6,16 @@
     </button>
 </div>
 
+<mat-form-field appearance="outline">
+    <mat-label>Search books</mat-label>
+
+    <input
+        matInput
+        [(ngModel)]="searchText"
+        (input)="filterBooks()">
+
+</mat-form-field>
+
 <table mat-table [dataSource]="books" class="mat-elevation-z2">
 
     <ng-container matColumnDef="title">
