@@ -1,15 +1,10 @@
+use rusqlite::{params, Connection, Result};
+
 use crate::models::book::Book;
-use rusqlite::{params, Connection};
 
-#[tauri::command]
-pub fn get_books() -> Vec<Book> {
-    Vec::new()
-}
+pub fn add_book(book: &Book) -> Result<()> {
 
-#[tauri::command]
-pub fn add_book(book: Book) -> Result<(), String> {
-    let conn = Connection::open("library.db")
-        .map_err(|e| e.to_string())?;
+    let conn = Connection::open("library.db")?;
 
     conn.execute(
         "
@@ -34,8 +29,7 @@ pub fn add_book(book: Book) -> Result<(), String> {
             book.publication_year,
             "Available"
         ],
-    )
-    .map_err(|e| e.to_string())?;
+    )?;
 
     Ok(())
 }

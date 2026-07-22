@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { BookService } from '../book/book.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AddBookDialogComponent } from '../features/books/add-book-dialog/add-book-dialog.component';
+import { Book } from '../book/book.model';
 
 @Component({
   selector: 'app-home',
@@ -11,10 +12,20 @@ import { AddBookDialogComponent } from '../features/books/add-book-dialog/add-bo
 })
 export class HomeComponent {
   private dialog = inject(MatDialog);
+  books: Book[] = [];
 
-  constructor() { }
+  constructor(private bookService: BookService) { }
+
+
+
+  loadBooks() {
+    this.bookService.getBooks().then(data => {
+      this.books = data;
+    });
+  }
 
   ngOnInit() {
+    this.loadBooks();
   }
 
   openAddBookDialog() {
@@ -24,7 +35,13 @@ export class HomeComponent {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
+      if (!result) {
+        return;
+      }
+
+      this.bookService.addBook(result).then(() => {
+        this.loadBooks();
+      });
     });
 
   }

@@ -11,4 +11,8 @@ export class BookService {
     return invoke<Book[]>('get_books');
   }
 
+  addBook(book: Book): Promise<void> {
+    return invoke('add_book', { book });
+  }
+
 }
