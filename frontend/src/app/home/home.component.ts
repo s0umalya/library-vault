@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { BookService } from '../book/book.service';
 
 @Component({
   selector: 'app-home',
@@ -7,5 +8,12 @@ import { Component } from '@angular/core';
   styleUrl: './home.component.scss'
 })
 export class HomeComponent {
+  constructor(private bookService: BookService) { }
+
+  ngOnInit() {
+    this.bookService.getBooks().then(data => {
+      console.log(data);
+    });
+  }
 
 }
