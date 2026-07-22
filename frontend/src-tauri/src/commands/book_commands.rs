@@ -1,10 +1,13 @@
 use crate::models::book::Book;
 use rusqlite::{params, Connection};
-
+use crate::database::connection::get_connection;
 #[tauri::command]
 pub fn get_books() -> Result<Vec<Book>, String> {
-    let conn = Connection::open("../library.db")
-        .map_err(|e| e.to_string())?;
+    // let conn = Connection::open("../library.db")
+    //     .map_err(|e| e.to_string())?;
+    
+let conn = get_connection()
+    .map_err(|e| e.to_string())?;
 
     let mut stmt = conn
         .prepare(
@@ -52,8 +55,11 @@ pub fn get_books() -> Result<Vec<Book>, String> {
 
 #[tauri::command]
 pub fn add_book(book: Book) -> Result<(), String> {
-    let conn = Connection::open("../library.db")
-        .map_err(|e| e.to_string())?;
+    // let conn = Connection::open("../library.db")
+    //     .map_err(|e| e.to_string())?;
+   
+let conn = get_connection()
+    .map_err(|e| e.to_string())?;
 
     println!("Adding book: {:?}", book);
 
@@ -90,8 +96,11 @@ pub fn add_book(book: Book) -> Result<(), String> {
 
 #[tauri::command]
 pub fn update_book(book: Book) -> Result<(), String> {
-    let conn = Connection::open("../library.db")
-        .map_err(|e| e.to_string())?;
+    // let conn = Connection::open("../library.db")
+    //     .map_err(|e| e.to_string())?;
+   
+let conn = get_connection()
+    .map_err(|e| e.to_string())?;
 
     let rows = conn.execute(
         "
@@ -126,8 +135,11 @@ pub fn update_book(book: Book) -> Result<(), String> {
 
 #[tauri::command]
 pub fn delete_book(id: i32) -> Result<(), String> {
-    let conn = Connection::open("../library.db")
-        .map_err(|e| e.to_string())?;
+    // let conn = Connection::open("../library.db")
+    //     .map_err(|e| e.to_string())?;
+    
+let conn = get_connection()
+    .map_err(|e| e.to_string())?;
 
     let rows = conn.execute(
         "

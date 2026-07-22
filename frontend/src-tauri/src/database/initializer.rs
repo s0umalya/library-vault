@@ -1,7 +1,10 @@
-use rusqlite::{Connection, Result};
+use rusqlite::Result;
 
-pub fn initialize_database() -> Result<()> {
-    let conn = Connection::open("../library.db")?;
+use crate::database::connection::get_connection;
+use tauri::AppHandle;
+
+pub fn initialize_database(app: &AppHandle) -> Result<(), Box<dyn std::error::Error>> {
+    let conn = get_connection()?;
 
     conn.execute(
         "
