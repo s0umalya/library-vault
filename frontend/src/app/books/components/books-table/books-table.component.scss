@@ -1,0 +1,23 @@
+:host {
+  display: block;
+  padding: 24px;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+table {
+  width: 100%;
+}
+
+.mat-column-actions {
+  width: 150px;
+}
+
+.mat-column-status {
+  width: 120px;
+}

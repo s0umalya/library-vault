@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { invoke } from '@tauri-apps/api/core';
-import { Book } from './book.model';
+import { Book } from '../models/book.model';
 
 @Injectable({
   providedIn: 'root'
