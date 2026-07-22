@@ -2,16 +2,62 @@ use crate::models::book::Book;
 use rusqlite::{params, Connection};
 
 #[tauri::command]
-pub fn get_books() -> Vec<Book> {
-    Vec::new()
+pub fn get_books() -> Result<Vec<Book>, String> {
+    let conn = Connection::open("../library.db")
+        .map_err(|e| e.to_string())?;
+
+    let mut stmt = conn
+        .prepare(
+            "
+            SELECT
+                id,
+                title,
+                author,
+                genre,
+                publisher,
+                isbn,
+                publication_year,
+                status,
+                created_at
+            FROM books
+            ORDER BY title
+            ",
+        )
+        .map_err(|e| e.to_string())?;
+
+    let books = stmt
+        .query_map([], |row| {
+            Ok(Book {
+                id: Some(row.get(0)?),
+                title: row.get(1)?,
+                author: row.get(2)?,
+                genre: row.get(3)?,
+                publisher: row.get(4)?,
+                isbn: row.get(5)?,
+                publication_year: row.get(6)?,
+                status: Some(row.get(7)?),
+                created_at: Some(row.get(8)?),
+            })
+        })
+        .map_err(|e| e.to_string())?;
+
+    let mut result = Vec::new();
+
+    for book in books {
+        result.push(book.map_err(|e| e.to_string())?);
+    }
+    println!("Books loaded: {}", result.len());
+    Ok(result)
 }
 
 #[tauri::command]
 pub fn add_book(book: Book) -> Result<(), String> {
-    let conn = Connection::open("library.db")
+    let conn = Connection::open("../library.db")
         .map_err(|e| e.to_string())?;
 
-    conn.execute(
+    println!("Adding book: {:?}", book);
+
+    let rows = conn.execute(
         "
         INSERT INTO books (
             title,
@@ -36,6 +82,8 @@ pub fn add_book(book: Book) -> Result<(), String> {
         ],
     )
     .map_err(|e| e.to_string())?;
+
+    println!("Rows inserted: {}", rows);
 
     Ok(())
 }

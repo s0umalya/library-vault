@@ -1,42 +1,81 @@
 <h2 mat-dialog-title>Add Book</h2>
 
-<mat-dialog-content>
+<form [formGroup]="form">
 
-  <mat-form-field appearance="outline">
-    <mat-label>Title</mat-label>
-    <input matInput formControlName="title">
-  </mat-form-field>
+  <mat-dialog-content>
 
-  <mat-form-field appearance="outline">
-    <mat-label>Author</mat-label>
-    <input matInput formControlName="author">
-  </mat-form-field>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Title</mat-label>
+      <input
+        matInput
+        formControlName="title"
+        autocomplete="off"
+      />
+    </mat-form-field>
 
-  <mat-form-field appearance="outline">
-    <mat-label>Genre</mat-label>
-    <input matInput formControlName="genre">
-  </mat-form-field>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Author</mat-label>
+      <input
+        matInput
+        formControlName="author"
+        autocomplete="off"
+      />
+    </mat-form-field>
 
-  <mat-form-field appearance="outline">
-    <mat-label>Publisher</mat-label>
-    <input matInput formControlName="publisher">
-  </mat-form-field>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Genre</mat-label>
+      <input
+        matInput
+        formControlName="genre"
+        autocomplete="off"
+      />
+    </mat-form-field>
 
-  <mat-form-field appearance="outline">
-    <mat-label>ISBN</mat-label>
-    <input matInput formControlName="isbn">
-  </mat-form-field>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Publisher</mat-label>
+      <input
+        matInput
+        formControlName="publisher"
+        autocomplete="off"
+      />
+    </mat-form-field>
 
-  <mat-form-field appearance="outline">
-    <mat-label>Publication Year</mat-label>
-    <input matInput type="number" formControlName="publicationYear">
-  </mat-form-field>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>ISBN</mat-label>
+      <input
+        matInput
+        formControlName="isbn"
+        autocomplete="off"
+      />
+    </mat-form-field>
 
-</mat-dialog-content>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Publication Year</mat-label>
+      <input
+        matInput
+        type="number"
+        formControlName="publicationYear"
+      />
+    </mat-form-field>
 
-<mat-dialog-actions align="end">
-  <button mat-button (click)="cancel()">Cancel</button>
-  <button mat-flat-button color="primary" (click)="save()">
-    Save
-  </button>
-</mat-dialog-actions>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button
+      mat-button
+      type="button"
+      (click)="cancel()">
+      Cancel
+    </button>
+
+    <button
+      mat-flat-button
+      color="primary"
+      type="button"
+      [disabled]="form.invalid"
+      (click)="save()">
+      Save
+    </button>
+  </mat-dialog-actions>
+
+</form>

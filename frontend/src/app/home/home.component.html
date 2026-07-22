@@ -1,8 +1,40 @@
-<button
-  mat-flat-button
-  color="primary"
-  (click)="openAddBookDialog()">
+<div class="toolbar">
+  <button
+    mat-flat-button
+    color="primary"
+    (click)="openAddBookDialog()">
+    Add Book
+  </button>
+</div>
 
-  Add Book
+@if (books.length === 0) {
+  <p>No books found.</p>
+} @else {
+  <table>
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Genre</th>
+        <th>Publisher</th>
+        <th>ISBN</th>
+        <th>Year</th>
+        <th>Status</th>
+      </tr>
+    </thead>
 
-</button>
+    <tbody>
+      @for (book of books; track book.id) {
+        <tr>
+          <td>{{ book.title }}</td>
+          <td>{{ book.author }}</td>
+          <td>{{ book.genre }}</td>
+          <td>{{ book.publisher }}</td>
+          <td>{{ book.isbn }}</td>
+          <td>{{ book.publicationYear }}</td>
+          <td>{{ book.status }}</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+}

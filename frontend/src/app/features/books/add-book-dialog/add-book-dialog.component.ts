@@ -29,7 +29,7 @@ export class AddBookDialogComponent {
     genre: [''],
     publisher: [''],
     isbn: [''],
-    publicationYear: ['']
+    publicationYear: [null]
   });
 
   save() {
