@@ -26,6 +26,20 @@
     width: 100%;
 }
 
+/* ==========================================
+   Search Field
+========================================== */
+
+.search-field {
+    --mdc-outlined-text-field-focus-outline-color: #{$secondary};
+    --mdc-outlined-text-field-focus-label-text-color: #{$secondary};
+    --mdc-outlined-text-field-caret-color: #{$secondary};
+}
+
+.search-field mat-icon {
+    color: $secondary;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
@@ -66,7 +80,7 @@ table {
 
 .book-row {
     cursor: pointer;
-    transition: background-color .2s ease;
+    transition: background-color .2s ease, transform .15s ease;
 }
 
 .book-row:nth-child(even) {
@@ -74,7 +88,7 @@ table {
 }
 
 .book-row:hover {
-    background: rgba($primary, .05);
+    background: rgba($secondary, .08);
 }
 
 /* ==========================================
@@ -82,7 +96,7 @@ table {
 ========================================== */
 
 .mat-column-book {
-    width: 36%;
+    width: 34%;
 }
 
 .book-cell {
@@ -106,15 +120,17 @@ table {
     font-weight: 600;
     color: $text-primary;
     line-height: 1.35;
-    white-space: nowrap;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
     overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 .book-author {
     margin-top: 4px;
     font-size: .85rem;
-    color: $text-secondary;
+    color: $secondary;
+    font-weight: 500;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -195,12 +211,12 @@ table {
 }
 
 .action-buttons button:not([color="warn"]) {
-    color: $primary;
+    color: $secondary;
 }
 
 .action-buttons button:not([color="warn"]):hover {
-    background: rgba($primary, .08);
-    transform: scale(1.05);
+    background: rgba($secondary, .12);
+    transform: scale(1.08);
 }
 
 .action-buttons button[color="warn"] {
@@ -209,7 +225,7 @@ table {
 
 .action-buttons button[color="warn"]:hover {
     background: rgba($error, .08);
-    transform: scale(1.05);
+    transform: scale(1.08);
 }
 
 /* ==========================================
@@ -253,7 +269,7 @@ mat-paginator {
     width: 72px;
     height: 72px;
     font-size: 72px;
-    color: $primary;
+    color: $secondary;
 }
 
 .empty-state h3 {
