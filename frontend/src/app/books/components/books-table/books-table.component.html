@@ -1,79 +1,240 @@
-<div class="toolbar">
-    <h1>{{ libraryName }}</h1>
-    <button mat-flat-button color="primary" (click)="openAddBookDialog()">
-        Add Book
-    </button>
+<div class="books-card app-card">
+
+    <div class="toolbar">
+
+        <mat-form-field appearance="outline" class="search-field">
+
+            <mat-label>Search books</mat-label>
+
+            <mat-icon matPrefix>search</mat-icon>
+
+            <input
+                matInput
+                [(ngModel)]="searchText"
+                (input)="filterBooks()"
+                autocomplete="off">
+
+        </mat-form-field>
+
+        <button
+            mat-flat-button
+            color="primary"
+            (click)="openAddBookDialog()">
+
+            <mat-icon>add</mat-icon>
+
+            Add Book
+
+        </button>
+
+    </div>
+
+    @if (dataSource.data.length > 0) {
+
+    <table mat-table [dataSource]="dataSource" matSort>
+
+        <!-- Book -->
+
+        <ng-container matColumnDef="book">
+
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="book">
+
+                Book
+
+            </th>
+
+            <td mat-cell *matCellDef="let book" class="book-cell">
+
+                <div class="book-info">
+
+                    <div class="book-content">
+
+                        <div
+                            class="book-title"
+                            [matTooltip]="book.title">
+
+                            {{ book.title }}
+
+                        </div>
+
+                        <div class="book-author">
+
+                            {{ book.author }}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </td>
+
+        </ng-container>
+
+        <!-- Genre -->
+
+        <ng-container matColumnDef="genre">
+
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+
+                Genre
+
+            </th>
+
+            <td mat-cell *matCellDef="let book">
+
+                {{ book.genre || '-' }}
+
+            </td>
+
+        </ng-container>
+
+        <!-- Publisher -->
+
+        <ng-container matColumnDef="publisher">
+
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+
+                Publisher
+
+            </th>
+
+            <td mat-cell *matCellDef="let book">
+
+                {{ book.publisher || '-' }}
+
+            </td>
+
+        </ng-container>
+
+        <!-- Language -->
+
+        <ng-container matColumnDef="language">
+
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+
+                Language
+
+            </th>
+
+            <td mat-cell *matCellDef="let book">
+
+                {{ book.language || '-' }}
+
+            </td>
+
+        </ng-container>
+
+        <!-- Status -->
+
+        <ng-container matColumnDef="status">
+
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+
+                Status
+
+            </th>
+
+            <td mat-cell *matCellDef="let book">
+
+                <span
+                    class="status-badge"
+                    [ngClass]="book.status.toLowerCase()">
+
+                    {{ book.status }}
+
+                </span>
+
+            </td>
+
+        </ng-container>
+
+        <!-- Actions -->
+
+        <ng-container matColumnDef="actions">
+
+            <th mat-header-cell *matHeaderCellDef>
+
+                Actions
+
+            </th>
+
+            <td mat-cell *matCellDef="let book">
+
+                <div class="action-buttons">
+
+                    <button
+                        mat-icon-button
+                        matTooltip="Edit Book"
+                        (click)="$event.stopPropagation(); editBook(book)">
+
+                        <mat-icon>edit</mat-icon>
+
+                    </button>
+
+                    <button
+                        mat-icon-button
+                        color="warn"
+                        matTooltip="Delete Book"
+                        (click)="$event.stopPropagation(); deleteBook(book)">
+
+                        <mat-icon>delete</mat-icon>
+
+                    </button>
+
+                </div>
+
+            </td>
+
+        </ng-container>
+
+        <tr
+            mat-header-row
+            *matHeaderRowDef="displayedColumns">
+        </tr>
+
+        <tr
+            mat-row
+            *matRowDef="let row; columns: displayedColumns"
+            class="book-row"
+            (click)="openBookDetails(row)">
+        </tr>
+
+    </table>
+
+    <mat-paginator
+        [pageSize]="10"
+        [pageSizeOptions]="[5, 10, 25, 50]"
+        showFirstLastButtons>
+    </mat-paginator>
+
+    } @else {
+
+    <div class="empty-state">
+
+        <mat-icon>library_books</mat-icon>
+
+        <h3>No books found</h3>
+
+        <p>
+
+            Add your first book to start building your library.
+
+        </p>
+
+        <button
+            mat-flat-button
+            color="primary"
+            (click)="openAddBookDialog()">
+
+            <mat-icon>add</mat-icon>
+
+            Add First Book
+
+        </button>
+
+    </div>
+
+    }
+
 </div>
-
-<mat-form-field appearance="outline">
-    <mat-label>Search books</mat-label>
-
-    <input matInput [(ngModel)]="searchText" (input)="filterBooks()">
-
-</mat-form-field>
-
-<table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z2">
-
-    <ng-container matColumnDef="title">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Title</th>
-        <td mat-cell *matCellDef="let book" [matTooltip]="book.title">{{ book.title }}</td>
-    </ng-container>
-
-    <ng-container matColumnDef="author">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Author</th>
-        <td mat-cell *matCellDef="let book">{{ book.author }}</td>
-    </ng-container>
-
-    <ng-container matColumnDef="genre">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Genre</th>
-        <td mat-cell *matCellDef="let book">{{ book.genre || '-' }}</td>
-    </ng-container>
-
-    <ng-container matColumnDef="publisher">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Publisher</th>
-        <td mat-cell *matCellDef="let book">{{ book.publisher || '-' }}</td>
-    </ng-container>
-
-    <ng-container matColumnDef="isbn">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>ISBN</th>
-        <td mat-cell *matCellDef="let book">{{ book.isbn || '-' }}</td>
-    </ng-container>
-
-    <ng-container matColumnDef="publicationYear">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Year</th>
-        <td mat-cell *matCellDef="let book">{{ book.publicationYear || '-' }}</td>
-    </ng-container>
-
-    <ng-container matColumnDef="status">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
-        <td mat-cell *matCellDef="let book">
-            <span class="status-badge" [ngClass]="book.status.toLowerCase()">
-
-                {{ book.status }}
-
-            </span>
-        </td>
-    </ng-container>
-
-    <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef>Actions</th>
-
-        <td mat-cell *matCellDef="let book">
-            <button mat-icon-button (click)="editBook(book)">
-                <mat-icon>edit</mat-icon>
-            </button>
-            <button mat-icon-button color="warn" (click)="deleteBook(book)">
-                <mat-icon>delete</mat-icon>
-            </button>
-        </td>
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-
-</table>
-<mat-paginator
-  [pageSize]="10"
-  [pageSizeOptions]="[5, 10, 25, 50]"
-  showFirstLastButtons>
-</mat-paginator>

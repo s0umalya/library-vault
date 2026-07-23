@@ -1,1 +1,10 @@
-<app-books-table></app-books-table>
+<div class="page">
+
+    <app-page-header
+        [title]="librarySettings?.libraryName ?? 'Library Vault'"
+        [subtitle]="librarySettings?.description ?? 'Personal Collection'">
+    </app-page-header>
+
+    <app-books-table></app-books-table>
+
+</div>

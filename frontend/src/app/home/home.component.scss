@@ -1,0 +1,16 @@
+@use '../../styles/variables' as *;
+
+:host {
+    display: block;
+    min-height: 100vh;
+    background: $background;
+}
+
+.page {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}

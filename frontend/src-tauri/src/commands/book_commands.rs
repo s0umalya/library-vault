@@ -1,13 +1,10 @@
-use crate::models::book::Book;
-use rusqlite::{params, Connection};
 use crate::database::connection::get_connection;
+use crate::models::book::Book;
+use rusqlite::params;
+
 #[tauri::command]
 pub fn get_books() -> Result<Vec<Book>, String> {
-    // let conn = Connection::open("../library.db")
-    //     .map_err(|e| e.to_string())?;
-    
-let conn = get_connection()
-    .map_err(|e| e.to_string())?;
+    let conn = get_connection().map_err(|e| e.to_string())?;
 
     let mut stmt = conn
         .prepare(
@@ -18,6 +15,7 @@ let conn = get_connection()
                 author,
                 genre,
                 publisher,
+                language,
                 isbn,
                 publication_year,
                 status,
@@ -36,10 +34,11 @@ let conn = get_connection()
                 author: row.get(2)?,
                 genre: row.get(3)?,
                 publisher: row.get(4)?,
-                isbn: row.get(5)?,
-                publication_year: row.get(6)?,
-                status: Some(row.get(7)?),
-                created_at: Some(row.get(8)?),
+                language: row.get(5)?,
+                isbn: row.get(6)?,
+                publication_year: row.get(7)?,
+                status: Some(row.get(8)?),
+                created_at: Some(row.get(9)?),
             })
         })
         .map_err(|e| e.to_string())?;
@@ -49,45 +48,46 @@ let conn = get_connection()
     for book in books {
         result.push(book.map_err(|e| e.to_string())?);
     }
+
     println!("Books loaded: {}", result.len());
+
     Ok(result)
 }
 
 #[tauri::command]
 pub fn add_book(book: Book) -> Result<(), String> {
-    // let conn = Connection::open("../library.db")
-    //     .map_err(|e| e.to_string())?;
-   
-let conn = get_connection()
-    .map_err(|e| e.to_string())?;
+    let conn = get_connection().map_err(|e| e.to_string())?;
 
     println!("Adding book: {:?}", book);
 
-    let rows = conn.execute(
-        "
-        INSERT INTO books (
-            title,
-            author,
-            genre,
-            publisher,
-            isbn,
-            publication_year,
-            status,
-            created_at
+    let rows = conn
+        .execute(
+            "
+            INSERT INTO books (
+                title,
+                author,
+                genre,
+                publisher,
+                language,
+                isbn,
+                publication_year,
+                status,
+                created_at
+            )
+            VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, datetime('now'))
+            ",
+            params![
+                book.title,
+                book.author,
+                book.genre,
+                book.publisher,
+                book.language,
+                book.isbn,
+                book.publication_year,
+                "Available"
+            ],
         )
-        VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, datetime('now'))
-        ",
-        params![
-            book.title,
-            book.author,
-            book.genre,
-            book.publisher,
-            book.isbn,
-            book.publication_year,
-            "Available"
-        ],
-    )
-    .map_err(|e| e.to_string())?;
+        .map_err(|e| e.to_string())?;
 
     println!("Rows inserted: {}", rows);
 
@@ -96,37 +96,36 @@ let conn = get_connection()
 
 #[tauri::command]
 pub fn update_book(book: Book) -> Result<(), String> {
-    // let conn = Connection::open("../library.db")
-    //     .map_err(|e| e.to_string())?;
-   
-let conn = get_connection()
-    .map_err(|e| e.to_string())?;
+    let conn = get_connection().map_err(|e| e.to_string())?;
 
-    let rows = conn.execute(
-        "
-        UPDATE books
-        SET
-            title = ?1,
-            author = ?2,
-            genre = ?3,
-            publisher = ?4,
-            isbn = ?5,
-            publication_year = ?6,
-            status = ?7
-        WHERE id = ?8
-        ",
-        params![
-            book.title,
-            book.author,
-            book.genre,
-            book.publisher,
-            book.isbn,
-            book.publication_year,
-            book.status.unwrap_or("Available".to_string()),
-            book.id
-        ],
-    )
-    .map_err(|e| e.to_string())?;
+    let rows = conn
+        .execute(
+            "
+            UPDATE books
+            SET
+                title = ?1,
+                author = ?2,
+                genre = ?3,
+                publisher = ?4,
+                language = ?5,
+                isbn = ?6,
+                publication_year = ?7,
+                status = ?8
+            WHERE id = ?9
+            ",
+            params![
+                book.title,
+                book.author,
+                book.genre,
+                book.publisher,
+                book.language,
+                book.isbn,
+                book.publication_year,
+                book.status.unwrap_or("Available".to_string()),
+                book.id
+            ],
+        )
+        .map_err(|e| e.to_string())?;
 
     println!("Rows updated: {}", rows);
 
@@ -135,20 +134,17 @@ let conn = get_connection()
 
 #[tauri::command]
 pub fn delete_book(id: i32) -> Result<(), String> {
-    // let conn = Connection::open("../library.db")
-    //     .map_err(|e| e.to_string())?;
-    
-let conn = get_connection()
-    .map_err(|e| e.to_string())?;
+    let conn = get_connection().map_err(|e| e.to_string())?;
 
-    let rows = conn.execute(
-        "
-        DELETE FROM books
-        WHERE id = ?1
-        ",
-        params![id],
-    )
-    .map_err(|e| e.to_string())?;
+    let rows = conn
+        .execute(
+            "
+            DELETE FROM books
+            WHERE id = ?1
+            ",
+            params![id],
+        )
+        .map_err(|e| e.to_string())?;
 
     println!("Rows deleted: {}", rows);
 

@@ -1,8 +1,8 @@
 export type BookStatus =
   | 'Available'
   | 'Borrowed'
-  | 'Reserved'
-    'Lost';
+  | 'Lent'
+  | 'Lost';
 
 export interface Book {
   id?: number;
@@ -10,6 +10,7 @@ export interface Book {
   author: string;
   genre?: string;
   publisher?: string;
+  language?: string;
   isbn?: string;
   publicationYear?: number;
   status: BookStatus;

@@ -8,6 +8,7 @@ pub struct Book {
     pub author: String,
     pub genre: Option<String>,
     pub publisher: Option<String>,
+    pub language: Option<String>,
     pub isbn: Option<String>,
     pub publication_year: Option<i32>,
     pub status: Option<String>,

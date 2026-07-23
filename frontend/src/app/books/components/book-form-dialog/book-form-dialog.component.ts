@@ -1,5 +1,5 @@
-import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit, inject } from '@angular/core';
 import {
   FormBuilder,
   ReactiveFormsModule,
@@ -7,14 +7,15 @@ import {
 } from '@angular/forms';
 
 import {
+  MAT_DIALOG_DATA,
   MatDialogModule,
   MatDialogRef
 } from '@angular/material/dialog';
 
 import { MatButtonModule } from '@angular/material/button';
-import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-book-form-dialog',
@@ -26,39 +27,54 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
     MatButtonModule,
     MatInputModule,
     MatFormFieldModule,
+    MatSelectModule
   ],
   templateUrl: './book-form-dialog.component.html',
   styleUrl: './book-form-dialog.component.scss'
 })
-export class BookFormDialogComponent {
+export class BookFormDialogComponent implements OnInit {
 
-  private fb = inject(FormBuilder);
+  private readonly fb = inject(FormBuilder);
 
-  private dialogRef = inject(
-    MatDialogRef<BookFormDialogComponent>
-  );
-  data = inject(MAT_DIALOG_DATA, { optional: true });
+  private readonly dialogRef =
+    inject(MatDialogRef<BookFormDialogComponent>);
 
-  form = this.fb.group({
+  readonly data = inject(MAT_DIALOG_DATA, {
+    optional: true
+  });
+
+  readonly form = this.fb.group({
     title: ['', Validators.required],
     author: ['', Validators.required],
     genre: [''],
     publisher: [''],
+    language: [''],
     isbn: [''],
-    publicationYear: [null]
+    publicationYear: [null],
+    status: ['Available', Validators.required]
   });
 
-  isEditMode: boolean = false;
+  isEditMode = false;
 
   ngOnInit(): void {
+
     this.isEditMode = !!this.data;
 
-    if (this.isEditMode) {
-      this.form.patchValue(this.data);
+    if (this.data) {
+      this.form.patchValue({
+        ...this.data,
+        status: this.data.status ?? 'Available'
+      });
     }
+
   }
 
   save(): void {
+
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
 
     const book = this.form.getRawValue();
 
@@ -68,11 +84,12 @@ export class BookFormDialogComponent {
       author: book.author,
       genre: book.genre,
       publisher: book.publisher,
+      language: book.language,
       isbn: book.isbn,
       publicationYear: book.publicationYear
         ? Number(book.publicationYear)
         : null,
-      status: this.data?.status ?? 'Available',
+      status: book.status,
       createdAt: this.data?.createdAt
     });
 

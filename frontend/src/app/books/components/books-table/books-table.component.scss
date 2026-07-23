@@ -1,58 +1,292 @@
+@use '../../../../styles/variables' as *;
+
 :host {
-  display: block;
-  padding: 24px;
+    display: block;
+}
+
+.books-card {
+    padding: 24px;
+    border-radius: $radius-large;
 }
 
 .toolbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+.search-field {
+    flex: 1;
+    max-width: 420px;
+}
+
+.search-field .mat-mdc-form-field {
+    width: 100%;
 }
 
 table {
-  width: 100%;
+    width: 100%;
+    border-collapse: collapse;
+    background: transparent;
 }
 
-.mat-column-actions {
-  width: 150px;
+/* ==========================================
+   Table Header
+========================================== */
+
+.mat-mdc-header-row {
+    background: $surface;
+}
+
+.mat-mdc-header-cell {
+    padding: 18px 16px;
+    font-size: .9rem;
+    font-weight: 700;
+    color: $text-primary;
+    border-bottom: 3px solid $primary;
+}
+
+.mat-sort-header-sorted,
+.mat-sort-header-arrow {
+    color: $primary !important;
+}
+
+/* ==========================================
+   Table Body
+========================================== */
+
+.mat-mdc-cell {
+    padding: 18px 16px;
+    color: $text-primary;
+    border-bottom: 1px solid $border;
+    vertical-align: middle;
+}
+
+.book-row {
+    cursor: pointer;
+    transition: background-color .2s ease;
+}
+
+.book-row:nth-child(even) {
+    background: #fafbfd;
+}
+
+.book-row:hover {
+    background: rgba($primary, .05);
+}
+
+/* ==========================================
+   Book Column
+========================================== */
+
+.mat-column-book {
+    width: 36%;
+}
+
+.book-cell {
+    user-select: none;
+}
+
+.book-info {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+}
+
+.book-content {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.book-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: $text-primary;
+    line-height: 1.35;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.book-author {
+    margin-top: 4px;
+    font-size: .85rem;
+    color: $text-secondary;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ==========================================
+   Other Columns
+========================================== */
+
+.mat-column-genre {
+    width: 16%;
+}
+
+.mat-column-publisher {
+    width: 18%;
+}
+
+.mat-column-language {
+    width: 12%;
 }
 
 .mat-column-status {
-  width: 120px;
+    width: 130px;
 }
 
+.mat-column-actions {
+    width: 110px;
+    text-align: center;
+}
+
+/* ==========================================
+   Status Chips
+========================================== */
+
 .status-badge {
-  padding: 4px 10px;
-  border-radius: 16px;
-  font-size: 12px;
-  font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 92px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
 }
 
 .available {
-  background: #e8f5e9;
-  color: #2e7d32;
-}
-
-.lent {
-  background: #fff8e1;
-  color: #ef6c00;
+    background: #E8F5E9;
+    color: #2E7D32;
 }
 
 .borrowed {
-  background: #e3f2fd;
-  color: #1565c0;
+    background: #E3F2FD;
+    color: #1565C0;
+}
+
+.lent {
+    background: #FFF3E0;
+    color: #EF6C00;
 }
 
 .lost {
-  background: #ffebee;
-  color: #c62828;
+    background: #FFEBEE;
+    color: #C62828;
 }
 
-.mat-mdc-row:nth-child(even) {
-    background: #fafafa;
+/* ==========================================
+   Actions
+========================================== */
+
+.action-buttons {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
 }
 
-.mat-mdc-row:hover {
-    background: #f5f5f5;
+.action-buttons button {
+    transition: all .2s ease;
+}
+
+.action-buttons button:not([color="warn"]) {
+    color: $primary;
+}
+
+.action-buttons button:not([color="warn"]):hover {
+    background: rgba($primary, .08);
+    transform: scale(1.05);
+}
+
+.action-buttons button[color="warn"] {
+    color: $error;
+}
+
+.action-buttons button[color="warn"]:hover {
+    background: rgba($error, .08);
+    transform: scale(1.05);
+}
+
+/* ==========================================
+   Buttons
+========================================== */
+
+button[mat-flat-button] {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 46px;
+    padding: 0 24px;
+    white-space: nowrap;
+}
+
+/* ==========================================
+   Paginator
+========================================== */
+
+mat-paginator {
+    margin-top: 12px;
+    border-top: 1px solid $border;
+    background: transparent;
+}
+
+/* ==========================================
+   Empty State
+========================================== */
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 72px 24px;
+    text-align: center;
+}
+
+.empty-state mat-icon {
+    width: 72px;
+    height: 72px;
+    font-size: 72px;
+    color: $primary;
+}
+
+.empty-state h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: $text-primary;
+}
+
+.empty-state p {
+    margin: 0;
+    max-width: 420px;
+    color: $text-secondary;
+    line-height: 1.6;
+}
+
+/* ==========================================
+   Responsive
+========================================== */
+
+@media (max-width: 992px) {
+
+    .toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .search-field {
+        max-width: none;
+    }
+
+    button[mat-flat-button] {
+        align-self: flex-end;
+    }
+
 }
