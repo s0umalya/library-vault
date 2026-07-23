@@ -1,0 +1,23 @@
+@use './variables' as *;
+
+.page {
+
+    max-width: $page-width;
+
+    margin: auto;
+
+    padding: 48px;
+
+}
+
+.center-page {
+
+    min-height: 100vh;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+}

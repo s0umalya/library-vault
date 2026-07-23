@@ -1,0 +1,45 @@
+@use './variables' as *;
+
+html,
+body {
+
+    font-family: "Inter", sans-serif;
+    color: $text-primary;
+
+}
+
+.page-title {
+
+    font-size: 42px;
+    font-weight: 700;
+    line-height: 1.2;
+
+}
+
+.section-title {
+
+    font-size: 28px;
+    font-weight: 700;
+
+}
+
+.card-title {
+
+    font-size: 24px;
+    font-weight: 600;
+
+}
+
+.subtitle {
+
+    font-size: 18px;
+    color: $text-secondary;
+
+}
+
+.body-text {
+
+    font-size: 15px;
+    line-height: 1.6;
+
+}

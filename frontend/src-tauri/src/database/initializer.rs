@@ -22,7 +22,17 @@ pub fn initialize_database(app: &AppHandle) -> Result<(), Box<dyn std::error::Er
         ",
         [],
     )?;
-
+    conn.execute(
+        "
+        CREATE TABLE IF NOT EXISTS library_settings (
+            id INTEGER PRIMARY KEY CHECK(id = 1),
+            library_name TEXT NOT NULL,
+            description TEXT,
+            created_at TEXT NOT NULL
+        )
+        ",
+        [],
+    )?;
     println!("Database initialized successfully.");
 
     Ok(())

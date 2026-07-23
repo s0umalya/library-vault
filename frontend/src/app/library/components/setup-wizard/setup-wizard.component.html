@@ -1,0 +1,80 @@
+<div class="setup-container">
+
+    <div class="setup-card app-card">
+
+        <div class="setup-left">
+
+            <div class="logo-circle">
+
+                📚
+
+            </div>
+
+            <h2>Library Vault</h2>
+
+            <p>
+                Organize your books, track your collection and
+                build your personal library.
+            </p>
+
+        </div>
+
+        <div class="setup-right">
+
+            <h1 class="page-title">
+                Welcome
+            </h1>
+
+            <p class="subtitle">
+                Create your personal library to get started.
+            </p>
+
+            <form
+                [formGroup]="form"
+                (ngSubmit)="createLibrary()">
+
+                <mat-form-field appearance="outline">
+
+                    <mat-label>Library Name</mat-label>
+
+                    <input
+                        matInput
+                        formControlName="libraryName">
+
+                    <mat-error
+                        *ngIf="form.get('libraryName')?.hasError('required')">
+
+                        Library name is required
+
+                    </mat-error>
+
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+
+                    <mat-label>Description</mat-label>
+
+                    <textarea
+                        matInput
+                        rows="5"
+                        formControlName="description">
+                    </textarea>
+
+                </mat-form-field>
+
+                <button
+                    mat-flat-button
+                    color="primary"
+                    type="submit">
+
+                    Create Library
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,13 @@
+@use './variables' as *;
+
+.app-card {
+
+    background: $surface;
+
+    border-radius: $radius-large;
+
+    box-shadow: $shadow;
+
+    border: 1px solid $border;
+
+}

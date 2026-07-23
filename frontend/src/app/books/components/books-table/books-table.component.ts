@@ -16,6 +16,7 @@ import { ViewChild, AfterViewInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CommonModule } from '@angular/common';
+import { LibraryService } from '../../../library/services/library.service';
 
 @Component({
   selector: 'app-books-table',
@@ -52,10 +53,17 @@ export class BooksTableComponent implements AfterViewInit {
   ];
   searchText = '';
   allBooks: Book[] = [];
+  libraryName = 'Library Vault';
 
-  constructor(private bookService: BookService) { }
+  constructor(
+    private bookService: BookService,
+    private libraryService: LibraryService
+  ) { }
 
   ngOnInit() {
+    this.libraryService.getLibrarySettings().then(settings => {
+      this.libraryName = settings.libraryName;
+    });
     this.loadBooks();
   }
 

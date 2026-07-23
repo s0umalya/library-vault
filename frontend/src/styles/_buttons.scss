@@ -1,0 +1,13 @@
+@use './variables' as *;
+
+.mat-mdc-raised-button {
+
+    height: 48px;
+
+    border-radius: $radius-medium !important;
+
+    font-weight: 600;
+
+    padding: 0 28px;
+
+}
